@@ -6,3 +6,5 @@ String str = "alkfdjlaksjdf驾照驾照驾照加右轼林大戟是lkj 324lkj lka
 a : 5
 b : 2
 驾 : 3
+
+
