@@ -1,0 +1,8 @@
+
+作业：
+给定一个字符串, 统计每个字符出现的次数
+
+String str = "alkfdjlaksjdf驾照驾照驾照加右轼林大戟是lkj 324lkj lkajsdflkjasdf;lakjsdfl;lakjsdf ";
+a : 5
+b : 2
+驾 : 3
