@@ -1,3 +1,5 @@
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,15 @@ public class Tests {
         }
         System.out.println(map);
 
+    }
 
+    @Test
+    public void test() {
+        Runnable hello = new DisplayMessage("Hello");
+        Thread thread1 = new Thread(hello);
+        thread1.setDaemon(true);
+        thread1.setName("hello");
+        System.out.println("Starting hello thread...");
+        thread1.start();
     }
 }
