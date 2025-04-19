@@ -1,4 +1,4 @@
-// 文件名 : GuessANumber.java
+package day01;// 文件名 : day01.GuessANumber.java
 // 通过继承 Thread 类创建线程
 
 public class GuessANumber extends Thread {

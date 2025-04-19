@@ -1,4 +1,6 @@
-// 文件名 : ThreadClassDemo.java
+package day01;
+
+// 文件名 : day01.ThreadClassDemo.java
 public class ThreadClassDemo {
 
     public static void main(String [] args) {

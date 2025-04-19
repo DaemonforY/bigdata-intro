@@ -1,8 +1,10 @@
-class RunnableDemo implements Runnable {
+package day01;
+
+class ThreadDemo extends Thread {
     private Thread t;
     private String threadName;
 
-    RunnableDemo( String name) {
+    ThreadDemo( String name) {
         threadName = name;
         System.out.println("Creating " +  threadName );
     }
@@ -21,7 +23,7 @@ class RunnableDemo implements Runnable {
         System.out.println("Thread " +  threadName + " exiting.");
     }
 
-    public void threadStart() {
+    public void start () {
         System.out.println("Starting " +  threadName );
         if (t == null) {
             t = new Thread (this, threadName);
@@ -30,13 +32,14 @@ class RunnableDemo implements Runnable {
     }
 }
 
-public class TestThread {
+public class TestThread1 {
 
     public static void main(String args[]) {
-        RunnableDemo R1 = new RunnableDemo( "Thread-1");
-        R1.threadStart();
+        ThreadDemo T1 = new ThreadDemo( "Thread-1");
+        T1.start();
+        T1.setPriority(Thread.MAX_PRIORITY);
 
-        RunnableDemo R2 = new RunnableDemo( "Thread-2");
-        R2.threadStart();
+        ThreadDemo T2 = new ThreadDemo( "Thread-2");
+        T2.start();
     }
 }

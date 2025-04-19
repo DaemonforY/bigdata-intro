@@ -1,4 +1,6 @@
-// 文件名 : DisplayMessage.java
+package day01;
+
+// 文件名 : day01.DisplayMessage.java
 // 通过实现 Runnable 接口创建线程
 public class DisplayMessage implements Runnable {
     private String message;
