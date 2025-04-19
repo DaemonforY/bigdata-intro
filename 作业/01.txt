@@ -8,3 +8,8 @@ b : 2
 驾 : 3
 
 
+作业：
+降序该如何实现：
+        Random random = new Random();
+        random.ints().limit(5).sorted().forEach(System.out::println);
+
