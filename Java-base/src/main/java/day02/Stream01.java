@@ -29,5 +29,11 @@ public class Stream01 {
                 .distinct()
                 .collect(Collectors.toList());
         System.out.println(squaresList);
+
+        Random random1 = new Random();
+        random1.ints().limit(5)
+                .boxed()
+                .sorted((a, b) -> Integer.compare(b, a)) // 降序排序
+                .forEach(System.out::println);
     }
 }
