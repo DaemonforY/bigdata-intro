@@ -26,7 +26,7 @@ Java 5.0引入了枚举，枚举限制变量只能是预先设定好的值。使
 
 例如，我们为果汁店设计一个程序，它将限制果汁为小杯、中杯、大杯。这就意味着它不允许顾客点除了这三种尺寸外的果汁。
 
-``` java
+``` 
 class FreshJuice {
    enum FreshJuiceSize{ SMALL, MEDIUM , LARGE }
    FreshJuiceSize size;
@@ -445,3 +445,1355 @@ public class SleepDemo {
 }
 ```
 
+
+
+## Java数据结构
+
+Java 提供了丰富的数据结构，主要通过 **Java 集合框架（Java Collections Framework, JCF）** 来实现。这些数据结构可以分为两大类：**线性结构** 和 **非线性结构**。以下是主要的数据结构及其特点：
+
+- **1.线性数据结构**
+
+- #### **(1) 数组（Array）**
+
+  - **特点**：固定大小、连续内存、索引访问快（O(1)）。
+  - **实现类**：`int[]`, `String[]` 等原生数组。
+  - **适用场景**：已知大小、频繁随机访问。
+
+  #### **(2) 动态数组（ArrayList）**
+
+  - **特点**：基于数组实现，自动扩容（O(n) 插入/删除）。
+  - **实现类**：`java.util.ArrayList`。
+  - **适用场景**：需要动态大小且频繁随机访问。
+
+  #### **(3) 链表（LinkedList）**
+
+  - **特点**：双向链表，插入/删除快（O(1)），随机访问慢（O(n)）。
+  - **实现类**：`java.util.LinkedList`。
+  - **适用场景**：频繁插入/删除，较少随机访问。
+
+- #### **2.非线性数据结构**
+
+- #### **1. HashSet（哈希集合）**
+
+  - **特点**：
+
+    - 基于 `HashMap` 实现，只存储 **唯一元素**（不允许重复）。
+    - 内部使用 `HashMap` 的 `Key` 存储元素，`Value` 统一为一个 `PRESENT`（虚拟对象）。
+    - 无序（不保证插入顺序），允许 `null` 值。
+    - 查找、插入、删除的平均时间复杂度为 **O(1)**（哈希冲突时可能退化到 O(n)）。
+
+  - **核心方法**：
+
+    ```java
+    HashSet<String> set = new HashSet<>();
+    set.add("A");  // 添加元素
+    set.contains("A");  // 判断是否包含
+    set.remove("A");  // 删除元素
+    ```
+
+  - **适用场景**：
+
+    - 去重（如统计唯一单词）。
+    - 快速判断元素是否存在（如黑名单过滤）。
+
+- #### **2. HashMap（哈希映射）**
+
+  - **特点**：
+
+    - 存储 **键值对（Key-Value）**，`Key` 唯一，`Value` 可重复。
+    - 基于 **数组 + 链表/红黑树**（Java 8 优化，链表长度 ≥8 时转红黑树）。
+    - 无序（`LinkedHashMap` 可保持插入顺序），允许 `null` 键和 `null` 值。
+    - 查找、插入、删除的平均时间复杂度为 **O(1)**。
+
+  - **核心方法**：
+
+    java
+
+    ```java
+    HashMap<String, Integer> map = new HashMap<>();
+    map.put("Key", 100);  // 添加键值对
+    map.get("Key");       // 获取值
+    map.containsKey("Key"); // 判断键是否存在
+    ```
+
+  - **适用场景**：
+
+    - 缓存（如 `Redis` 的键值存储）。
+    - 快速通过 `Key` 访问数据（如数据库索引）。
+
+### **ArrayList 常用方法**
+
+`ArrayList` 是 Java 中最常用的动态数组实现，基于数组实现，支持动态扩容。以下是它的核心方法及使用示例：
+
+------
+
+### **1. 添加元素**
+
+#### **(1) `add(E element)`**
+
+- **作用**：在列表末尾添加元素。
+
+- **时间复杂度**：平均 **O(1)**（扩容时为 O(n)）。
+
+- 示例
+
+  ```java
+  ArrayList<String> list = new ArrayList<>();
+  list.add("Apple");  // ["Apple"]
+  list.add("Banana"); // ["Apple", "Banana"]
+  ```
+
+#### **(2) `add(int index, E element)`**
+
+- **作用**：在指定索引位置插入元素。
+
+- **时间复杂度**：**O(n)**（需要移动后续元素）。
+
+- 示例
+
+  ```java
+  list.add(1, "Orange"); // ["Apple", "Orange", "Banana"]
+  ```
+
+------
+
+### **2. 获取元素**
+
+#### **(1) `get(int index)`**
+
+- **作用**：返回指定索引位置的元素。
+
+- **时间复杂度**：**O(1)**（数组随机访问）。
+
+- 示例
+
+  ```java
+  String fruit = list.get(1); // "Orange"
+  ```
+
+#### **(2) `size()`**
+
+- **作用**：返回列表当前元素数量。
+
+- 示例
+
+  ```java
+  int size = list.size(); // 3
+  ```
+
+------
+
+### **3. 删除元素**
+
+#### **(1) `remove(int index)`**
+
+- **作用**：删除指定索引位置的元素，并返回被删除的元素。
+
+- **时间复杂度**：**O(n)**（需要移动后续元素）。
+
+- 示例
+
+  ```java
+  String removed = list.remove(0); // 删除 "Apple"，返回 "Apple"
+  // 剩余列表：["Orange", "Banana"]
+  ```
+
+#### **(2) `remove(Object o)`**
+
+- **作用**：删除第一个匹配的元素（按 `equals()` 判断）。
+
+- **时间复杂度**：**O(n)**（需要遍历查找）。
+
+- 示例
+
+  ```java
+  boolean isRemoved = list.remove("Banana"); // true，列表变为 ["Orange"]
+  ```
+
+------
+
+### **4. 修改元素**
+
+#### **(1) `set(int index, E element)`**
+
+- **作用**：替换指定索引位置的元素，并返回旧值。
+
+- **时间复杂度**：**O(1)**。
+
+- 示例
+
+  ```java
+  String oldVal = list.set(0, "Grape"); // "Orange" 被替换为 "Grape"
+  ```
+
+------
+
+### **5. 查找元素**
+
+#### **(1) `contains(Object o)`**
+
+- **作用**：判断列表是否包含指定元素。
+
+- **时间复杂度**：**O(n)**（遍历查找）。
+
+- 示例
+
+  ```java
+  boolean hasApple = list.contains("Apple"); // false
+  ```
+
+#### **(2) `indexOf(Object o)`**
+
+- **作用**：返回元素第一次出现的索引，未找到则返回 -1。
+
+- 示例
+
+  ```java
+  int index = list.indexOf("Grape"); // 0
+  ```
+
+------
+
+### **6. 清空与判空**
+
+#### **(1) `clear()`**
+
+- **作用**：清空所有元素。
+
+- 示例
+
+  ```java
+  list.clear(); // 列表变为 []
+  ```
+
+#### **(2) `isEmpty()`**
+
+- **作用**：判断列表是否为空。
+
+- 示例
+
+  ```java
+  boolean empty = list.isEmpty(); // true
+  ```
+
+------
+
+### **7. 遍历列表**
+
+#### **(1) for 循环**
+
+```java
+for (int i = 0; i < list.size(); i++) {
+    System.out.println(list.get(i));
+}
+```
+
+#### **(2) 增强 for 循环（foreach）**
+
+```java
+for (String fruit : list) {
+    System.out.println(fruit);
+}
+```
+
+#### **(3) 迭代器（Iterator）**
+
+```java
+Iterator<String> it = list.iterator();
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+```
+
+------
+
+### **8. 转换为数组**
+
+#### **(1) `toArray()`**
+
+- **作用**：将列表转为 `Object[]` 数组。
+
+- 示例
+
+  ```java
+  Object[] array = list.toArray();
+  ```
+
+#### **(2) `toArray(T[] a)`**
+
+- **作用**：转为指定类型的数组。
+
+- 示例
+
+  ```java
+  String[] fruitArray = list.toArray(new String[0]);
+  ```
+
+------
+
+### **9. 其他实用方法**
+
+#### **(1) `subList(int fromIndex, int toIndex)`**
+
+- **作用**：返回子列表视图（原列表修改会影响子列表）。
+
+- 示例
+
+  ```java
+  List<String> subList = list.subList(0, 1); // 包含 fromIndex，不包含 toIndex
+  ```
+
+#### **(2) `sort(Comparator<? super E> c)`**
+
+- **作用**：按比较器排序列表。
+
+- 示例
+
+  ```java
+  list.sort(Comparator.naturalOrder()); // 自然排序（升序）
+  ```
+
+### **LinkedList 常用方法**
+
+`LinkedList` 是 Java 中基于 **双向链表** 实现的列表，适用于频繁插入/删除的场景。以下是其核心方法及使用示例：
+
+------
+
+## **1. 添加元素**
+
+### **(1) `add(E element)`**
+
+- **作用**：在链表末尾添加元素。
+
+- **时间复杂度**：**O(1)**。
+
+- 示例
+
+  ```java
+  LinkedList<String> list = new LinkedList<>();
+  list.add("Apple");  // ["Apple"]
+  list.add("Banana"); // ["Apple", "Banana"]
+  ```
+
+### **(2) `addFirst(E element)` / `addLast(E element)`**
+
+- **作用**：在链表头部/尾部插入元素。
+
+- **时间复杂度**：**O(1)**。
+
+- 示例
+
+  ```java
+  list.addFirst("Orange"); // ["Orange", "Apple", "Banana"]
+  list.addLast("Grape");   // ["Orange", "Apple", "Banana", "Grape"]
+  ```
+
+### **(3) `add(int index, E element)`**
+
+- **作用**：在指定位置插入元素。
+
+- **时间复杂度**：**O(n)**（需要遍历到指定位置）。
+
+- 示例
+
+  ```java
+  list.add(1, "Peach"); // ["Orange", "Peach", "Apple", "Banana", "Grape"]
+  ```
+
+------
+
+## **2. 获取元素**
+
+### **(1) `get(int index)`**
+
+- **作用**：获取指定位置的元素。
+
+- **时间复杂度**：**O(n)**（链表需遍历）。
+
+- 示例
+
+  ```java
+  String fruit = list.get(2); // "Apple"
+  ```
+
+### **(2) `getFirst()` / `getLast()`**
+
+- **作用**：获取链表头/尾元素。
+
+- **时间复杂度**：**O(1)**。
+
+- 示例
+
+  ```java
+  String first = list.getFirst(); // "Orange"
+  String last = list.getLast();   // "Grape"
+  ```
+
+------
+
+## **3. 删除元素**
+
+### **(1) `remove()` / `removeFirst()` / `removeLast()`**
+
+- **作用**：删除并返回链表头/尾元素。
+
+- **时间复杂度**：**O(1)**。
+
+- 示例
+
+  ```java
+  String removedHead = list.remove();      // 删除 "Orange"，返回 "Orange"
+  String removedTail = list.removeLast();   // 删除 "Grape"，返回 "Grape"
+  ```
+
+### **(2) `remove(int index)`**
+
+- **作用**：删除指定位置的元素。
+
+- **时间复杂度**：**O(n)**。
+
+- 示例
+
+  ```java
+  String removed = list.remove(1); // 删除 "Apple"，返回 "Apple"
+  ```
+
+### **(3) `remove(Object o)`**
+
+- **作用**：删除第一个匹配的元素（按 `equals()` 判断）。
+
+- **时间复杂度**：**O(n)**。
+
+- 示例
+
+  ```java
+  boolean isRemoved = list.remove("Banana"); // true
+  ```
+
+------
+
+## **4. 修改元素**
+
+### **(1) `set(int index, E element)`**
+
+- **作用**：修改指定位置的元素。
+
+- **时间复杂度**：**O(n)**。
+
+- 示例
+
+  ```java
+  list.set(0, "Mango"); // 将第一个元素改为 "Mango"
+  ```
+
+------
+
+## **5. 查找元素**
+
+### **(1) `contains(Object o)`**
+
+- **作用**：判断链表是否包含某元素。
+
+- **时间复杂度**：**O(n)**。
+
+- 示例
+
+  ```java
+  boolean hasMango = list.contains("Mango"); // true
+  ```
+
+### **(2) `indexOf(Object o)` / `lastIndexOf(Object o)`**
+
+- **作用**：返回元素第一次/最后一次出现的索引。
+
+- 示例
+
+  ```java
+  int firstIndex = list.indexOf("Mango"); // 0
+  ```
+
+------
+
+## **6. 队列操作（Deque 接口）**
+
+`LinkedList` 实现了 `Deque` 接口，支持队列操作：
+
+### **(1) `offer(E e)` / `offerFirst(E e)` / `offerLast(E e)`**
+
+- **作用**：向队列尾部/头部添加元素（失败返回 `false`）。
+
+- 示例
+
+  ```java
+  list.offer("Peach"); // 添加到尾部
+  ```
+
+### **(2) `poll()` / `pollFirst()` / `pollLast()`**
+
+- **作用**：移除并返回队列头/尾元素（队列为空时返回 `null`）。
+
+- 示例
+
+  ```java
+  String head = list.poll(); // 移除并返回第一个元素
+  ```
+
+### **(3) `peek()` / `peekFirst()` / `peekLast()`**
+
+- **作用**：查看队列头/尾元素（不删除）。
+
+- 示例
+
+  ```java
+  String first = list.peek(); // 返回第一个元素但不删除
+  ```
+
+------
+
+## **7. 遍历 LinkedList**
+
+### **(1) for 循环（不推荐，效率低）**
+
+```java
+for (int i = 0; i < list.size(); i++) {
+    System.out.println(list.get(i)); // 每次 get(i) 都是 O(n)！
+}
+```
+
+### **(2) 增强 for 循环（推荐）**
+
+```java
+for (String fruit : list) {
+    System.out.println(fruit);
+}
+```
+
+### **(3) 迭代器（Iterator）**
+
+```java
+Iterator<String> it = list.iterator();
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+```
+
+------
+
+## **8. 其他方法**
+
+### **(1) `size()`**
+
+- **作用**：返回链表元素个数。
+
+- 示例
+
+  ```java
+  int size = list.size(); // 当前元素数量
+  ```
+
+### **(2) `clear()`**
+
+- **作用**：清空链表。
+
+- 示例
+
+  ```java
+  list.clear(); // 清空所有元素
+  ```
+
+### **(3) `toArray()`**
+
+- **作用**：转为数组。
+
+- 示例
+
+  ```java
+  Object[] array = list.toArray();
+  ```
+
+### **HashSet 常用方法详解**
+
+`HashSet` 是 Java 中基于 `HashMap` 实现的集合类，用于存储 **唯一元素**（不允许重复）。它不保证元素的顺序，但提供高效的查找、插入和删除操作（平均时间复杂度 O(1)）。以下是其核心方法及使用示例：
+
+------
+
+## **1. 添加元素**
+
+### **(1) `add(E element)`**
+
+- **作用**：向集合中添加元素（若元素已存在则忽略）。
+
+- **返回值**：`true`（添加成功）或 `false`（元素已存在）。
+
+- **时间复杂度**：平均 **O(1)**（哈希冲突时可能退化到 O(n)）。
+
+- 示例
+
+  ```java
+  HashSet<String> set = new HashSet<>();
+  set.add("Apple");  // true
+  set.add("Banana"); // true
+  set.add("Apple");  // false（重复元素）
+  ```
+
+------
+
+## **2. 删除元素**
+
+### **(1) `remove(Object o)`**
+
+- **作用**：删除指定元素（若存在）。
+
+- **返回值**：`true`（删除成功）或 `false`（元素不存在）。
+
+- **时间复杂度**：平均 **O(1)**。
+
+- 示例
+
+  ```java
+  set.remove("Banana"); // true
+  set.remove("Grape");  // false（元素不存在）
+  ```
+
+### **(2) `clear()`**
+
+- **作用**：清空集合中的所有元素。
+
+- 示例
+
+  ```java
+  set.clear(); // 集合变为空 []
+  ```
+
+------
+
+## **3. 查找元素**
+
+### **(1) `contains(Object o)`**
+
+- **作用**：判断集合是否包含指定元素。
+
+- **返回值**：`true` 或 `false`。
+
+- **时间复杂度**：平均 **O(1)**。
+
+- 示例
+
+  ```java
+  boolean hasApple = set.contains("Apple"); // true
+  ```
+
+------
+
+## **4. 集合大小与判空**
+
+### **(1) `size()`**
+
+- **作用**：返回集合中的元素数量。
+
+- 示例
+
+  ```java
+  int size = set.size(); // 2
+  ```
+
+### **(2) `isEmpty()`**
+
+- **作用**：判断集合是否为空。
+
+- 示例
+
+  ```java
+  boolean empty = set.isEmpty(); // false
+  ```
+
+------
+
+## **5. 遍历 HashSet**
+
+### **(1) 增强 for 循环（推荐）**
+
+```java
+for (String fruit : set) {
+    System.out.println(fruit);
+}
+```
+
+### **(2) 迭代器（Iterator）**
+
+```java
+Iterator<String> it = set.iterator();
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+```
+
+### **(3) Java 8 forEach**
+
+```java
+set.forEach(System.out::println);
+```
+
+------
+
+## **6. 转换为数组**
+
+### **(1) `toArray()`**
+
+- **作用**：将集合转为 `Object[]` 数组。
+
+- 示例
+
+  ```java
+  Object[] array = set.toArray();
+  ```
+
+### **(2) `toArray(T[] a)`**
+
+- **作用**：转为指定类型的数组。
+
+- 示例
+
+  ```java
+  String[] fruitArray = set.toArray(new String[0]);
+  ```
+
+------
+
+## **7. 集合操作（交集、并集、差集）**
+
+### **(1) `addAll(Collection<? extends E> c)`（并集）**
+
+- **作用**：将另一个集合的所有元素添加到当前集合（自动去重）。
+
+- 示例
+
+  ```java
+  HashSet<String> otherSet = new HashSet<>(Arrays.asList("Grape", "Apple"));
+  set.addAll(otherSet); // set: ["Apple", "Banana", "Grape"]
+  ```
+
+### **(2) `retainAll(Collection<?> c)`（交集）**
+
+- **作用**：仅保留当前集合中与另一集合共有的元素。
+
+- 示例
+
+  ```java
+  set.retainAll(Arrays.asList("Apple", "Grape")); // set: ["Apple", "Grape"]
+  ```
+
+### **(3) `removeAll(Collection<?> c)`（差集）**
+
+- **作用**：删除当前集合中与另一集合重合的元素。
+
+- 示例
+
+  ```java
+  set.removeAll(Arrays.asList("Apple")); // set: ["Grape"]
+  ```
+
+------
+
+## **8. 其他注意事项**
+
+1. **允许 `null` 值**：
+
+   ```java
+   set.add(null); // 合法
+   ```
+
+2. **线程不安全**：
+
+   - 多线程环境下需使用 `Collections.synchronizedSet` 或 `ConcurrentHashMap` 的包装类。
+
+3. **元素唯一性**：
+
+   - 依赖 `hashCode()` 和 `equals()` 方法判断重复性，需确保自定义对象正确重写这两个方法。
+
+### HashMap 常用方法
+
+`HashMap` 是 Java 中最常用的 **键值对（Key-Value）存储结构**，基于哈希表实现，提供高效的查找、插入和删除操作（平均时间复杂度 O(1)）。以下是其核心方法及使用示例：
+
+------
+
+## **1. 添加/更新键值对**
+
+### **(1) `put(K key, V value)`**
+
+- **作用**：添加键值对（若 `key` 已存在则覆盖旧值）。
+
+- **返回值**：被覆盖的旧值（若 `key` 不存在则返回 `null`）。
+
+- **时间复杂度**：平均 **O(1)**（哈希冲突时可能退化到 O(n)）。
+
+- 示例
+
+  ```java
+  HashMap<String, Integer> map = new HashMap<>();
+  map.put("Apple", 10);   // null（首次添加）
+  map.put("Banana", 20);  // null
+  map.put("Apple", 30);  // 返回旧值 10，并更新为 30
+  ```
+
+### **(2) `putIfAbsent(K key, V value)`**
+
+- **作用**：仅当 `key` 不存在时才插入键值对。
+
+- **返回值**：已存在的值或 `null`。
+
+- 示例
+
+  ```java
+  map.putIfAbsent("Banana", 50); // 返回 20（不更新）
+  map.putIfAbsent("Grape", 40);  // null（新增）
+  ```
+
+------
+
+## **2. 获取值**
+
+### **(1) `get(Object key)`**
+
+- **作用**：根据 `key` 获取对应的 `value`。
+
+- **返回值**：`value` 或 `null`（若 `key` 不存在）。
+
+- **时间复杂度**：平均 **O(1)**。
+
+- 示例
+
+  ```java
+  int count = map.get("Apple"); // 30
+  Integer val = map.get("Mango"); // null
+  ```
+
+### **(2) `getOrDefault(Object key, V defaultValue)`**
+
+- **作用**：安全获取值，若 `key` 不存在则返回默认值。
+
+- 示例
+
+  ```java
+  int count = map.getOrDefault("Mango", 0); // 0
+  ```
+
+------
+
+## **3. 删除键值对**
+
+### **(1) `remove(Object key)`**
+
+- **作用**：删除指定 `key` 的键值对。
+
+- **返回值**：被删除的 `value` 或 `null`。
+
+- 示例
+
+  ```java
+  map.remove("Banana"); // 返回 20
+  map.remove("Mango");  // null
+  ```
+
+### **(2) `remove(Object key, Object value)`**
+
+- **作用**：仅当 `key` 和 `value` 均匹配时才删除。
+
+- **返回值**：`true`（删除成功）或 `false`。
+
+- 示例
+
+  ```java
+  map.remove("Apple", 10); // false（当前 value 是 30）
+  map.remove("Apple", 30); // true
+  ```
+
+------
+
+## **4. 判断键/值是否存在**
+
+### **(1) `containsKey(Object key)`**
+
+- **作用**：判断是否包含指定 `key`。
+
+- **时间复杂度**：平均 **O(1)**。
+
+- 示例
+
+  ```java
+  boolean hasApple = map.containsKey("Apple"); // false（已被删除）
+  ```
+
+### **(2) `containsValue(Object value)`**
+
+- **作用**：判断是否包含指定 `value`。
+
+- **时间复杂度**：**O(n)**（需遍历所有值）。
+
+- 示例
+
+  ```java
+  boolean has20 = map.containsValue(20); // false
+  ```
+
+------
+
+## **5. 遍历 HashMap**
+
+### **(1) 遍历所有键值对（Entry）**
+
+```java
+for (Map.Entry<String, Integer> entry : map.entrySet()) {
+    System.out.println(entry.getKey() + ": " + entry.getValue());
+}
+```
+
+### **(2) 遍历所有键（Key）**
+
+```java
+for (String key : map.keySet()) {
+    System.out.println(key);
+}
+```
+
+### **(3) 遍历所有值（Value）**
+
+```java
+for (int value : map.values()) {
+    System.out.println(value);
+}
+```
+
+### **(4) Java 8 forEach**
+
+```java
+map.forEach((key, value) -> System.out.println(key + ": " + value));
+```
+
+------
+
+## **6. 集合大小与清空**
+
+### **(1) `size()`**
+
+- **作用**：返回键值对数量。
+
+- 示例
+
+  ```java
+  int size = map.size(); // 1（当前只有 "Grape": 40）
+  ```
+
+### **(2) `clear()`**
+
+- **作用**：清空所有键值对。
+
+- 示例
+
+  ```java
+  map.clear(); // 清空后 size() 为 0
+  ```
+
+------
+
+## **7. 其他实用方法**
+
+### **(1) `replace(K key, V value)`**
+
+- **作用**：替换 `key` 对应的 `value`（若 `key` 存在）。
+
+- **返回值**：旧值或 `null`。
+
+- 示例
+
+  ```java
+  map.replace("Grape", 50); // 返回 40，并更新为 50
+  ```
+
+### **(2) `replace(K key, V oldValue, V newValue)`**
+
+- **作用**：仅当 `key` 和 `oldValue` 均匹配时才替换。
+
+- **返回值**：`true`（替换成功）或 `false`。
+
+- 示例
+
+  ```java
+  map.replace("Grape", 40, 60); // false（当前 value 是 50）
+  ```
+
+### **(3) `compute(K key, BiFunction)`**
+
+- **作用**：动态计算并更新 `value`（适合计数器场景）。
+
+- 示例
+
+  ```java
+  map.compute("Grape", (k, v) -> v + 10); // "Grape": 60
+  ```
+
+### **Java 多线程编程**
+
+Java 多线程允许程序同时执行多个任务，提高 CPU 利用率和程序响应速度。以下是 Java 多线程的核心概念、实现方式和常见问题解决方案。
+
+------
+
+## **1. 线程的创建方式**
+
+### **(1) 继承 `Thread` 类**
+
+```java
+class MyThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Thread running: " + Thread.currentThread().getName());
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyThread thread = new MyThread();
+        thread.start(); // 启动线程
+    }
+}
+```
+
+- 特点：
+  - 直接继承 `Thread`，重写 `run()` 方法。
+  - 单继承限制（Java 不支持多继承）。
+
+### **(2) 实现 `Runnable` 接口（推荐）**
+
+```java
+class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Thread running: " + Thread.currentThread().getName());
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Thread thread = new Thread(new MyRunnable());
+        thread.start();
+    }
+}
+```
+
+- 优点：
+  - 避免单继承限制。
+  - 适合资源共享（多个线程可共享同一个 `Runnable` 实例）。
+
+### **(3) 实现 `Callable` 接口（带返回值）**
+
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+
+class MyCallable implements Callable<String> {
+    @Override
+    public String call() throws Exception {
+        return "Result from " + Thread.currentThread().getName();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        FutureTask<String> futureTask = new FutureTask<>(new MyCallable());
+        Thread thread = new Thread(futureTask);
+        thread.start();
+        System.out.println(futureTask.get()); // 阻塞获取返回值
+    }
+}
+```
+
+- 特点：
+  - 可返回结果（通过 `FutureTask`）。
+  - 可抛出异常。
+
+------
+
+## **2. 线程生命周期**
+
+线程的状态通过 `Thread.State` 枚举表示：
+
+1. **NEW**：线程刚创建，未启动。
+2. **RUNNABLE**：正在运行或就绪（等待 CPU 调度）。
+3. **BLOCKED**：等待监视器锁（如 `synchronized`）。
+4. **WAITING**：无限期等待（如 `wait()`、`join()`）。
+5. **TIMED_WAITING**：超时等待（如 `sleep(ms)`）。
+6. **TERMINATED**：线程执行完毕。
+
+------
+
+## **3. 线程同步与锁**
+
+### **(1) `synchronized` 关键字**
+
+- 同步方法：
+
+  ```java
+  public synchronized void increment() {
+      counter++;
+  }
+  ```
+
+- 同步代码块：
+
+  ```java
+  public void increment() {
+      synchronized (this) {
+          counter++;
+      }
+  }
+  ```
+
+- 特点：
+
+  - 基于 JVM 内置锁（悲观锁）。
+  - 保证原子性和可见性。
+
+### **(2) `ReentrantLock`（可重入锁）**
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+private final ReentrantLock lock = new ReentrantLock();
+
+public void increment() {
+    lock.lock();
+    try {
+        counter++;
+    } finally {
+        lock.unlock(); // 必须手动释放
+    }
+}
+```
+
+- 优点：
+  - 支持公平锁（`new ReentrantLock(true)`）。
+  - 可中断锁（`lockInterruptibly()`）。
+
+### **(3) 原子类（`AtomicInteger` 等）**
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+
+private AtomicInteger counter = new AtomicInteger(0);
+
+public void increment() {
+    counter.incrementAndGet(); // CAS 操作
+}
+```
+
+- 特点：
+  - 无锁实现（基于 CPU 的 CAS 指令）。
+  - 高性能（适合简单原子操作）。
+
+
+
+
+
+## jdk8新特性
+
+### 一、lambda表达式
+
+允许将函数作为方法参数霍代码块进行传递，可以简化匿名内部类，实现函数式编程风格
+
+**语法**：  
+
+```java
+(parameters) -> expression
+// 或
+(parameters) -> { statements; }
+```
+
+**示例**：  
+
+```java
+// 传统匿名内部类
+Runnable r1 = new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("Hello");
+    }
+};
+
+// Lambda 表达式
+Runnable r2 = () -> System.out.println("Hello");
+```
+
+**关键点**：
+
+- **类型推断**：编译器自动推断参数类型。
+- **变量捕获**：可访问`final`或等效`final`的局部变量。
+- **简化集合遍历**：结合`forEach`方法使用。
+
+
+
+### 二、函数式接口
+
+仅包含一个抽象方法的接口，可以使用@FunctionInterface
+
+**常见内置接口**：
+
+1. `Predicate<T>`
+
+   条件判断：
+
+   ```
+   boolean test(T t)
+   ```
+
+   ```java
+   Predicate<String> isEmpty = s -> s.isEmpty();
+   ```
+
+2. `Consumer<T>`
+
+   消费数据：
+
+   ```
+   void accept(T t)
+   ```
+
+   ```java
+   Consumer<String> print = s -> System.out.println(s);
+   ```
+
+3. `Function<T, R>`
+
+   ```
+   R apply(T t)
+   ```
+
+   ```java
+   Function<String, Integer> length = s -> s.length();
+   ```
+
+4. `Supplier<T>`
+
+   ```
+   T get()
+   ```
+
+   ```java
+   Supplier<Double> random = () -> Math.random();
+   ```
+
+**自定义函数式接口**：
+
+```java
+@FunctionalInterface
+interface MyFunction {
+    int operate(int a, int b);
+}
+
+MyFunction add = (a, b) -> a + b;
+```
+
+### 三、Stream API
+
+以申明式处理集合数据，支持并行操作，简化复杂数据转换、过滤和聚合。
+
+- 无存储：不修改原始数据源。
+- 惰性求值：中间操作（如fliter）延迟执行，终端操作（如collect）触发计算。
+- 可并行：通过parallelStream()自动并行处理
+
+**常用操作**：
+
+1. 中间操作
+
+   （返回新Stream）：
+
+   - `filter(Predicate)`：过滤元素。
+   - `map(Function)`：元素转换。
+   - `sorted()`：排序。
+
+2. 终端操作
+
+   （返回结果或副作用）：
+
+   - `collect(Collectors.toList())`：收集结果。
+   - `forEach(Consumer)`：遍历元素。
+   - `reduce(BinaryOperator)`：聚合元素。
+
+**示例**：
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+List<Integer> squares = numbers.stream()
+    .filter(n -> n % 2 == 0)
+    .map(n -> n * n)
+    .collect(Collectors.toList()); // 输出 [4, 16]
+```
+
+**并行流**：
+
+```java
+long count = numbers.parallelStream()
+    .filter(n -> n > 3)
+    .count();
+```
+
+### 四、Optional类
+
+方便处理`null`，避免空指针异常，明确表示可能为空的返回值
+
+核心方法：
+
+- `Optional.ofNullable(T value)`：包装可能为`null`的值。
+- `orElse(T defaultValue)`：提供默认值。
+- `ifPresent(Consumer)`：值存在时执行操作。
+- `orElseThrow()`：值不存在时抛出异常。
+
+**示例**：
+
+```java
+Optional<String> name = Optional.ofNullable(getName());
+String result = name.orElse("Unknown");
+
+// 链式调用
+User user = getUserById(1)
+    .orElseThrow(() -> new NotFoundException("User not found"));
+```
+
+**注意事项**：
+
+- 避免在字段或方法参数中使用`Optional`。
+- 不要滥用`isPresent()`和`get()`，优先使用函数式方法。
+
+### 五、新的日期时间 API（JSR 310）
+
+**背景**：
+解决旧`java.util.Date`和`Calendar`的线程安全、设计混乱等问题。
+
+**核心类**：
+
+1. **`LocalDate`**：日期（年月日）。
+2. **`LocalTime`**：时间（时分秒）。
+3. **`LocalDateTime`**：日期 + 时间。
+4. **`ZonedDateTime`**：带时区的日期时间。
+5. **`DateTimeFormatter`**：替代`SimpleDateFormat`，线程安全。
+
+**示例**：
+
+java
+
+```java
+LocalDate today = LocalDate.now(); 
+LocalDate nextWeek = today.plusWeeks(1);
+
+// 格式化
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+String formatted = today.format(formatter);
+
+// 时区处理
+ZonedDateTime zonedTime = ZonedDateTime.now(ZoneId.of("Asia/Shanghai"));
+```
+
+**优势**：
+
+- **不可变性**：所有类实例不可变，线程安全。
+- **链式调用**：方法如`plusDays()`返回新对象。
+- **明确语义**：如`Period`表示日期差，`Duration`表示时间差。
