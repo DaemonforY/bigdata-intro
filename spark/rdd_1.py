@@ -2,6 +2,11 @@
 import json
 
 from pyspark import SparkConf, SparkContext
+"""
+点评：
+    1. groupByKey 在大数据量下不如 reduceByKey 快
+    2. 可以在结果上加上排名，并加上中文注释使结果更好看
+"""
 
 if __name__ == "__main__":
     conf = SparkConf().setMaster("local").setAppName("Spark")
