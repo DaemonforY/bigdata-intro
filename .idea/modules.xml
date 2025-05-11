@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Java-base/Java-base.iml" filepath="$PROJECT_DIR$/Java-base/Java-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/bigdata-intro.iml" filepath="$PROJECT_DIR$/.idea/bigdata-intro.iml" />
     </modules>
   </component>
 </project>
