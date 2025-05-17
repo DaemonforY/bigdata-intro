@@ -1,9 +1,7 @@
 package day01;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import day02.Event;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 
 import java.util.Calendar;
@@ -32,26 +30,5 @@ public class ClickSource implements SourceFunction<Event> {
     @Override
     public void cancel() {
         running = false;
-    }
-}
-
-@Getter
-@Setter
-@AllArgsConstructor
-class Event {
-    public String user;
-    public String url;
-    public Long timestamp;
-
-    public Event() {
-    }
-
-    @Override
-    public String toString() {
-        return "Event{" +
-                "user='" + user + '\'' +
-                ", url='" + url + '\'' +
-                ", timestamp=" + timestamp +
-                '}';
     }
 }
