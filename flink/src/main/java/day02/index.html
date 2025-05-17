@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Items Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>PV统计</h2>
+
+<table id="itemsTable">
+    <tr>
+        <th>url</th>
+        <th>count</th>
+    </tr>
+    <!-- 表格数据将会通过JavaScript插入到这里 -->
+</table>
+
+<script>
+    const fetchAndUpdateTable = () => {
+        // 使用Fetch API获取后端数据
+        fetch('http://localhost:8000/clicks/')
+            .then(response => response.json())
+            .then(items => {
+                // 输出到控制台
+                console.log(items);
+                // 获取表格的引用
+                const table = document.getElementById('itemsTable');
+                // 清空当前表格的行除了表头
+                while (table.rows.length > 1) {
+                    table.deleteRow(1); // 删除索引1开始的行，这保留了表头
+                }
+                // 对每一项数据创建一个新的表格行元素
+                items.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${item.url}</td>
+                        <td>${item.count}</td>
+                    `;
+                    // 将行元素添加到表格中
+                    table.appendChild(tr);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    };
+
+    // 设置定时器每隔1秒刷新一次数据
+    setInterval(fetchAndUpdateTable, 1000);
+
+    // 当页面加载时立即刷新一次数据
+    fetchAndUpdateTable();
+</script>
+
+</body>
+</html>
