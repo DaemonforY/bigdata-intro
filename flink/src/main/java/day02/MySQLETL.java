@@ -1,3 +1,4 @@
+
 package day02;
 
 import day01.ClickSource;
@@ -8,6 +9,7 @@ import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
 import org.apache.flink.connector.jdbc.JdbcSink;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.environment.CheckpointConfig.ExternalizedCheckpointCleanup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +22,7 @@ public class MySQLETL {
     private static void fromClickSourceGroupByToMySQL() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         DataStreamSource<Event> source = env.addSource(new ClickSource());
+        env.enableCheckpointing(5000);
 
         source.map(it -> Tuple2.of(it.url, 1L))
                 .returns(Types.TUPLE(Types.STRING, Types.LONG))
@@ -27,7 +30,7 @@ public class MySQLETL {
                 .sum(1)
                 .addSink(
                         JdbcSink.sink(
-                                "INSERT INTO clicks_pv (url, count) VALUES (?, ?) ON DUPLICATE KEY UPDATE count = VALUES(count)",
+                                "INSERT INTO clicks_pv (url, count) VALUES (?, ?) ON DUPLICATE KEY UPDATE count = count + VALUES(count)",
                                 (statement, r) -> {
                                     statement.setString(1, r.f0);
                                     statement.setInt(2, r.f1.intValue());
@@ -47,7 +50,7 @@ public class MySQLETL {
                         )
                 );
         System.out.println(env.getExecutionPlan());
-        env.execute();
+        env.execute("job1");
     }
 
     private static void fromClickSourceToMySQL() throws Exception {
