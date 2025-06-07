@@ -1,5 +1,0 @@
-
-1. git pull 拉取代码
-2. git add . 提交所有的更改
-3. git commit -m "XXX"
-4. git push
