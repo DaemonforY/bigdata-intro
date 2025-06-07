@@ -49,6 +49,7 @@ public class MySQLETL {
                                         .build()
                         )
                 );
+//        System.out.println(env.);
         System.out.println(env.getExecutionPlan());
         env.execute("job1");
     }
